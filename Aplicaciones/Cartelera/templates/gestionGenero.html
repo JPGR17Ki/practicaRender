@@ -1,0 +1,104 @@
+{% extends './plantilla.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center">Gestión de Géneros con Peticiones Asíncronas</h1>
+    <br>
+
+    <div class="row">
+        <div class="col-md-12 text-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generoModal">
+                <i class="fas fa-plus"></i>
+                <b>Agregar Género</b>
+            </button>
+        </div>
+        <br>
+        <div class="col-md-12" id="contenedor-genero"></div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="generoModal" tabindex="-1" aria-labelledby="generoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="generoModalLabel">Agregar Género</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="frm_nuevo_genero" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="portada" class="form-label">Portada</label>
+                        <input type="file" class="form-control" id="portada" name="portada">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Agregar Género</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('frm_nuevo_genero').addEventListener('submit', function(event) {
+        event.preventDefault(); // Previene el envío por defecto del formulario
+
+        if (this.checkValidity()) {
+            var formData = new FormData(this);
+
+            fetch('{% url "guardarGenero" %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.estado) {
+                    Swal.fire({
+                        title: "CONFIRMACIÓN",
+                        text: data.mensaje,
+                        icon: 'success'
+                    });
+                    $("#generoModal").modal('hide');
+                    this.reset();
+                    cargarGeneros();
+                } else {
+                    alert("ERROR :(");
+                }
+            })
+            .catch(error => {
+                console.error('Error al guardar género:', error);
+            });
+        }
+    });
+
+    function cargarGeneros() {
+        fetch('{% url "listadoGenero" %}')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('contenedor-genero').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Error al cargar géneros:', error);
+        });
+    }
+
+    cargarGeneros();
+
+    $(document).ready(function() {
+        $("#portada").fileinput({                       
+            showBrowse: true,
+            browseOnZoneClick: true            
+        });
+    });
+</script>
+
+{% endblock %}

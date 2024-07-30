@@ -1,0 +1,31 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+<h1>EDITAR GENERO</h1>
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <!--El metodo post es mas seguro al transportar datos-->
+            <form action="{% url 'procesarActualizacionGenero' %}" method="post">
+                <!-- Para que no exista Hackeo -->
+                {% csrf_token %}
+                <input type="hidden" name="id" id="id" value="{{generoEditar.id}}">
+                <label for="" style="color: rgb(0, 0, 0);"><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" value="{{generoEditar.nombre}}"
+                id="nombre" placeholder="Ingrese el nombre del genero">
+                <label for=""  style="color: rgb(0, 0, 0);"><b>Descripcion</b></label>
+                <textarea name="descripcion" id="descripcion" 
+                class="form-control" rows="3" placeholder="Ingrese la descripción" >{{generoEditar.descripcion}}
+                </textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">
+                    Actualizar
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'listadoGenero' %}" class="btn btn-danger">Cancelar</a>
+            </form>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}

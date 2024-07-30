@@ -1,0 +1,41 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+<h1>EDITAR GENERO</h1>
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <!--El metodo post es mas seguro al transportar datos-->
+            <form action="{% url 'procesarActualizacionPais' %}" method="post">
+                <!-- Para que no exista Hackeo -->
+                {% csrf_token %}
+                <input type="hidden" name="id" id="id" value="{{paisEditar.id}}">
+                <label for="" style="color: rgb(0, 0, 0);"><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" value="{{paisEditar.nombre}}"
+                id="nombre" placeholder="Ingrese el nombre de la pelicula">
+                <label for="" style="color: rgb(0, 0, 0);"><b>Continente:</b></label>
+                <select class="form-control" value="{{paisEditar.continente}}" name="continente" id="continente">
+                    <option>-- NINGUNO --</option>
+                    <option>Continente 1</option>
+                    <option>Continente 2</option>
+                    <option>Continente 3</option>
+                </select>
+                <label for="" style="color: rgb(0, 0, 0);"><b>Capital:</b></label>
+                <select class="form-control" value="{{paisEditar.capital}}" name="capital" id="capital">
+                    <option>-- NINGUNO --</option>
+                    <option>Capital 1</option>
+                    <option>Capital 2</option>
+                    <option>Capital 3</option>
+                </select>
+                <br>
+                <button type="submit" class="btn btn-primary">
+                    Actualizar
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'listadoPais' %}" class="btn btn-danger">Cancelar</a>
+            </form>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}

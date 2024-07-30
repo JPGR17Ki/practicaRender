@@ -1,0 +1,67 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+
+<div class="container-fluid bg-light">
+    <div class="row">
+        <div class="col-md-12">
+            <!--El metodo post es mas seguro al transportar datos-->
+            <form action="{% url 'guardarGenero' %}" enctype="multipart/form-data" id="frm_nuevo_genero" method="post">
+                
+                <!-- Para que no exista Hackeo -->
+                {% csrf_token %}
+                <label for="" style="color: rgb(0, 0, 0);"><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control"
+                id="nombre" placeholder="Ingrese el nombre del genero"><br>
+                <label for="descripcion"  style="color: rgb(0, 0, 0);"><b>Descripcion</b></label>
+                <textarea name="descripcion" id="descripcion" class="form-control" rows="3" ></textarea>
+                <br>
+                <label for=""  style="color: rgb(0, 0, 0);"><b>Fotografia:</b></label>
+                <input type="file" name="portada" id="portada" accept="image/*" required class="form-control">
+                <br>
+                <button type="submit" class="btn btn-primary">
+                    Guardar
+                </button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'listadoGenero' %}" class="btn btn-danger">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $("#frm_nuevo_genero").validate({
+        rules:{
+            nombre:{
+                required:true,
+                minlength:3,
+                maxlength:10
+            },
+            descripcion:{
+                required:true
+            },
+            portada:{
+                required:true
+            }
+        },
+        messages:{
+            nombre:{
+                required:"Por favor, ingrese el nombre",
+                minlength:"Ingrese minimo 3 dijitos",
+                maxlength:"Maximo 10 digitos"
+            },
+            descripcion:{
+                required:"DESCRIPCION OBLIGATORIA"
+            },
+            portada:{
+                required:"Por favor, INGRESE UNA CARPETA CON ESTA MEDIDA 30PX X 50 PX"
+            }
+        }
+    });
+
+    $(document).ready(function() {
+        $("#portada").fileinput({                       
+            showBrowse: true,
+            browseOnZoneClick: true            
+        });
+    });
+</script>
+{% endblock %}

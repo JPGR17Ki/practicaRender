@@ -1,0 +1,55 @@
+
+<br>
+<table style="margin-left: 25%; width: 50%;" class="table table-striped table-hover" id="tbl-generos">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">NOMBRE</th>
+        <th scope="col">DESCRIPCIÓN</th>
+        <th scope="col">FOTO</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+
+    <!-- Consultar los datos de la base de datos y traerlos a la tabla creada -->
+    <tbody>
+      {% for generoTemporal in generos %}
+            <tr>
+                <td>{{generoTemporal.id}}</td>
+                <td>{{generoTemporal.nombre}}</td>
+                <td>{{generoTemporal.descripcion}}</td>
+                <td>
+                  <a  href="{{ generoTemporal.portada.url }}" target="_blank">
+                    <img src="{{ generoTemporal.portada.url }}" alt="" style="width: 100px; height: auto;"> 
+                  </a>
+                  <br>
+                  <!-- DOWNLOAD ANTES DE HERF EN EL TAG A Y SE DESCARGA LA IMAGEN -->
+                  <a download href="{{ generoTemporal.portada.url }}" target="_blank">
+                    DESCARGAR IMAGEN
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'editarGenero' generoTemporal.id %}" class="btn btn-warning">Editar</a>
+                  
+                  <!-- Llamar a la url con parámetros -->
+
+                  <a href="{% url 'eliminarGenero' generoTemporal.id %}" class="btn btn-danger"
+                  onclick="return confirm('Estás seguro que deseas eliminar?')">Eliminar</a>
+                </td>
+            </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<script>
+  let table = new DataTable('#tbl-generos');
+</script>
+<style>
+    .dt-input{
+      border: 3px solid red !important;
+      border-radius: 20px !important;
+    }
+    
+</style>
+
+
